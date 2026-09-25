@@ -1,14 +1,22 @@
-name: TikTok SMM Automation Order
+name: Instagram SMM Automation Order
 
 on:
   workflow_dispatch:
     inputs:
-      target_username:
-        description: 'Enter TikTok Username (e.g. username)'
+      service_type:
+        description: 'Select Service Type'
         required: true
-        default: 'tiktok'
-      follow_count:
-        description: 'How many actions/follows to perform?'
+        type: choice
+        options:
+          - Followers
+          - Likes
+        default: 'Followers'
+      target_input:
+        description: 'Enter Username (for Followers) OR Post URL (for Likes)'
+        required: true
+        default: 'instagram'
+      action_count:
+        description: 'How many actions to perform?'
         required: true
         default: '1'
 
@@ -33,8 +41,9 @@ jobs:
 
     - name: Run Order Script
       env:
-        TARGET_USERNAME: ${{ github.event.inputs.target_username }}
-        FOLLOW_COUNT: ${{ github.event.inputs.follow_count }}
+        SERVICE_TYPE: ${{ github.event.inputs.service_type }}
+        TARGET_INPUT: ${{ github.event.inputs.target_input }}
+        ACTION_COUNT: ${{ github.event.inputs.action_count }}
         BOT_COOKIES: ${{ secrets.BOT_COOKIES }}
       run: |
         python main.py
